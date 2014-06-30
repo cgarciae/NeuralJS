@@ -1,4 +1,4 @@
 NeuralJS
 ========
 
-Neural Networks in JavaScript, inspired by CyBrain.
+Neural Networks in JavaScript, inspired by PyBrain.

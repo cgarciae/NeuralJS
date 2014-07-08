@@ -40,28 +40,23 @@ LinearWeight.prototype.filterSignal = function filterSignal() {
 /**
  * @class
  * @property {Val} z
- * @property {Val} y
+ * @property {Val} _y
  * @property {LinearWeight[]} sources
  * @property {LinearWeight[]} targets
  */
 function LinearNeuron () {
-    this.z = new Val (undefined);
-    this.y = new Val (undefined);
+    this._y = new Val (undefined);
     this.sources = [];
     this.targets = [];
 }
+
+LinearNeuron.prototype.f = R.identity;
 
 N.LinearNeuron = LinearNeuron;
 
 /**
  * @returns {number}
  */
-
-
-LinearNeuron.prototype.f =  function f () {
-    return  this.y.val ||
-            (this.y.val = this.z.val = R.foldl (addSignals, 0, this.sources));
-};
 
 
 
@@ -83,3 +78,5 @@ function sigmoid (x) {
 function addSignals (acc, weight){
     return acc + weight.filterSignal();
 }
+
+var sumSignals = R.foldl (addSignals, 0);

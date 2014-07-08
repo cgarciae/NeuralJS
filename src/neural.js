@@ -1,5 +1,5 @@
 /**
- * Created by Cristian García on 6/29/2014.
+ * Created by Cristian García and Carlos Alvarez on 6/29/2014.
  */
 
 var R = ramda,

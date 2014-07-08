@@ -1,5 +1,5 @@
 /**
- * Created by Cristian Garcia on 6/29/2014.
+ * Created by Cristian García on 6/29/2014.
  */
 
 var R = ramda,
@@ -20,6 +20,7 @@ N.Val = Val;
  * @property {Val} w
  * @property {LinearNeuron} source
  * @property {LinearNeuron} target
+ * @param {LinearNeuron} source
  */
 function LinearWeight (source, target, val) {
 
@@ -33,7 +34,7 @@ N.LinearWeight = LinearWeight;
  * @returns {number}
  */
 LinearWeight.prototype.filterSignal = function filterSignal() {
-    return this.source.y.val * this.w.val;
+    return this.source.f() * this.w.val;
 };
 
 /**
@@ -55,10 +56,11 @@ N.LinearNeuron = LinearNeuron;
 /**
  * @returns {number}
  */
-LinearNeuron.prototype.f =  function f () {
-    if (this.y.val) return this.y.val;
 
-    //return this.y.val = R.foldl (L.add, 0,)
+
+LinearNeuron.prototype.f =  function f () {
+    return  this.y.val ||
+            (this.y.val = this.z.val = R.foldl (addSignals, 0, this.sources));
 };
 
 
@@ -76,4 +78,8 @@ var LinearLayer = N.LinearLayer = function LinearLayer (n) {
  */
 function sigmoid (x) {
     return 1 / (1 + Math.exp (-x));
+}
+
+function addSignals (acc, weight){
+    return acc + weight.filterSignal();
 }

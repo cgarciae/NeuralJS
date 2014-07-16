@@ -5,7 +5,9 @@ Neural Networks in JavaScript, inspired by PyBrain.
 
 ### fullConnection
 **Signature**<br>
-`fullConnection :: Layer -> Layer -> Layer`
+```
+fullConnection :: Layer -> Layer -> Layer
+```
 
 **Expression**<br>
 `fullConnection (la, lb) == lb`

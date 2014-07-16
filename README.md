@@ -3,7 +3,7 @@ NeuralJS
 
 Neural Networks in JavaScript, inspired by PyBrain.
 
-##### fullConnection
+### fullConnection
 **Signature**<br>
 `fullConnection :: Layer -> Layer -> Layer`
 
@@ -25,7 +25,7 @@ is equivalent to
 ```
 fullConnection (fullConnection(la, lb), lc);
 ```
-#### fullConnectTo
+### fullConnectTo
 **Signature**<br>
 `(Layer l) => l.fullConnectTo :: Layer -> Layer`
 

@@ -10,7 +10,9 @@ fullConnection :: Layer -> Layer -> Layer
 ```
 
 **Expression**<br>
-`fullConnection (la, lb) == lb`
+```
+fullConnection (la, lb) == lb
+```
 
 **Description**<br>
 `fullConnection` connects all neurons in `la` to all neurons in `lb`, and returns `lb`. More specifically, for all `Neuron` `na` 
@@ -29,10 +31,14 @@ fullConnection (fullConnection(la, lb), lc);
 ```
 ### fullConnectTo
 **Signature**<br>
-`(Layer l) => l.fullConnectTo :: Layer -> Layer`
+```
+(Layer l) => l.fullConnectTo :: Layer -> Layer
+```
 
 **Expression**<br>
-`la.fullConnectTo (lb) == fullConnection (la, lb) == lb`
+```
+la.fullConnectTo (lb) == fullConnection (la, lb) == lb
+```
 
 **Description**<br>
 Same as `fullConnection` but wrapped as a method for `Layer`s.

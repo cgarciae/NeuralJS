@@ -6,6 +6,16 @@ var R = ramda,
     L = LambdaJS,
     N = {};
 
+/**
+ * @param {Neuron} neuron
+ * @param {number} data
+ * @returns {Neuron}
+ */
+var setProp = R.curry (function (prop, obj, value){
+    obj[prop] = value;
+    return obj;
+});
+
 function addSignals (acc, weight){
     return acc + weight.w * weight.source.y;
 }
@@ -83,12 +93,14 @@ Object.defineProperty(Neuron.prototype, 'y', {
 });
 
 /**
- * @param {Neuron} other
+ * @param {Neuron} a
+ * @param {Neuron} b
  */
-var connectNeurons = N.connectNeurons = function (a,b) {
+function connectNeurons (a,b) {
     var weight = new Weight (a, b);
     relate (a, b, weight);
-};
+}
+N.connectNeurons = connectNeurons;
 
 /**
  * @returns {number}
@@ -133,6 +145,13 @@ Layer.prototype.layerActivationFunction = function () {
     });
 };
 
+Layer.prototype.setData = function setData (data) {
+    if (this.neurons.length != data.length)
+        throw new Error('Data length is not equal to the number of neurons');
+
+    R.zipWith (setProp('y'), this.neurons, data)
+};
+
 
 
     /**
@@ -172,6 +191,5 @@ function relate (a, b, container) {
     a.targets.push (container || b);
     b.sources.push (container || a);
 }
-
 
 

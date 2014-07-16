@@ -4,13 +4,13 @@ NeuralJS
 Neural Networks in JavaScript, inspired by PyBrain.
 
 ##### fullConnection
-**Signature**
+**Signature**<br>
 `fullConnection :: Layer -> Layer -> Layer`
 
-**Expression**
+**Expression**<br>
 `fullConnection (la, lb) == lb`
 
-**Description**
+**Description**<br>
 `fullConnection` connects all neurons in `la` to all neurons in `lb`, and returns `lb`. More specifically, for all `Neuron` `na` 
 in `la.neurons`, and for all `Neuron` `nb` in `lb.neurons`, `Weight (na, nb)` belongs to `na.targets` and `nb.sources`. 
 This is the classical connection between layers.

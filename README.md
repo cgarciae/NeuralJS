@@ -25,14 +25,14 @@ is equivalent to
 ```
 fullConnection (fullConnection(la, lb), lc);
 ```
-##### fullConnectTo
-**Signature**
+#### fullConnectTo
+**Signature**<br>
 `(Layer l) => l.fullConnectTo :: Layer -> Layer`
 
-**Expression**
+**Expression**<br>
 `la.fullConnectTo (lb) == fullConnection (la, lb) == lb`
 
-**Description**
+**Description**<br>
 Same as `fullConnection` but wrapped as a method for `Layer`s.
 
 **Usage**

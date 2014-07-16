@@ -50,9 +50,15 @@ function LinearNeuron () {
     this.targets = [];
 }
 
-LinearNeuron.prototype.f = R.identity;
+N.LinearNeuron =  LinearNeuron;
 
-N.LinearNeuron = LinearNeuron;
+/**
+ * @param {LinearNeuron} other
+ */
+var connectNeurons = N.connectNeurons = function (a,b) {
+    var weight = new LinearWeight (a, b);
+    relate (a, b);
+};
 
 /**
  * @returns {number}
@@ -61,10 +67,39 @@ N.LinearNeuron = LinearNeuron;
 
 
 //Layers
+/**@class
+ * @property {LinearNeuron[]} neurons
+ * @property {LinearLayer[]} sources
+ * @property {LinearLayer[]} targets
+ * @param {number} n
+ */
 var LinearLayer = N.LinearLayer = function LinearLayer (n) {
-
+    this.neurons = R.map (createNeuron(LinearNeuron), R.range(0,n));
+    this.sources = [];
+    this.targets = [];
 };
 
+/**
+ * @param {LinearLayer} a
+ * @param {LinearLayer} b
+ */
+function FullConnection (a, b) {
+    relate (a, b);
+    
+    a.neurons.forEach (function (na) {
+        b.neurons.forEach (function (nb) {
+            connectNeurons (na, nb);
+        });
+    });
+}
+
+N.FullConnection = FullConnection;
+
+    function createNeuron (constructor) {
+    return function () {
+        return new constructor();
+    }
+}
 
 //Activation Functions
 /**
@@ -73,6 +108,11 @@ var LinearLayer = N.LinearLayer = function LinearLayer (n) {
  */
 function sigmoid (x) {
     return 1 / (1 + Math.exp (-x));
+}
+
+function relate (a, b) {
+    a.targets.push (b);
+    b.sources.push (a);
 }
 
 function addSignals (acc, weight){

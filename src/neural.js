@@ -6,22 +6,65 @@ var R = ramda,
     L = LambdaJS,
     N = {};
 
+//////////////////////////////////
+// UTILITY FUNCTIONS
+//////////////////////////////////
+
 /**
- * @param {Neuron} neuron
- * @param {number} data
- * @returns {Neuron}
+ * @param {String} prop
+ * @param {Object} value
+ * @param {Object} obj
+ * @returns {Object}
  */
+// setProp :: String -> a -> b -> b
 var setProp = R.curry (function (prop, value, obj){
     obj[prop] = value;
     return obj;
 });
-
+/**
+ * @param {number} acc
+ * @param {Weight} weight
+ * @returns {number}
+ */
+// addSignals :: Number -> Weight -> Number
 function addSignals (acc, weight){
     return acc + weight.w * weight.source.y;
 }
+/**
+ * @param {Weight[]} weights
+ * @returns {number}
+ */
+// sumSignals :: [Weight] -> Number
 var sumSignals = R.foldl (addSignals, 0);
 
+/**
+ * @param {Function} constructor
+ * @returns {Function}
+ */
+function createNeuron (constructor) {
+    return function () {
+        return new constructor();
+    }
+}
 
+function relate (a, b, container) {
+    a.targets.push (container || b);
+    b.sources.push (container || a);
+}
+//////////////////////////////////
+// UTILITY FUNCTIONS
+//////////////////////////////////
+/**
+ * @param {number} x
+ * @returns {number}
+ */
+function sigmoid (x) {
+    return 1 / (1 + Math.exp (-x));
+}
+
+//////////////////////////////////
+// VAL CLASS
+//////////////////////////////////
 /**
  * @class
  * @property {number} val
@@ -37,6 +80,19 @@ N.Val = Val;
  * @property {Val} w
  * @property {Neuron} source
  * @property {Neuron} target
+ * @param {Neuron} source
+ * @param {Neuron} target
+ * @param {number} [val]
+ */
+
+//////////////////////////////////
+// WEIGHT CLASS
+//////////////////////////////////
+/**
+ * @class
+ * @property {Neuron} source
+ * @property {Neuron} target
+ * @property {Neuron} val
  * @param {Neuron} source
  * @param {Neuron} target
  * @param {number} [val]
@@ -57,10 +113,9 @@ Object.defineProperty(Weight.prototype, 'w', {
     }
 });
 
-/**
- * @returns {number}
- */
-
+//////////////////////////////////
+// NEURON CLASS
+//////////////////////////////////
 /**
  * @class
  * @property {Val} z
@@ -109,8 +164,9 @@ N.connectNeurons = connectNeurons;
  */
 
 
-
-//Layers
+//////////////////////////////////
+// LINEAR LAYER CLASS
+//////////////////////////////////
 /**@class
  * @property {Neuron[]} neurons
  * @property {LinearLayer[]} sources
@@ -171,8 +227,7 @@ Object.defineProperty (LinearLayer.prototype, 'targetData', {
     }
 });
 
-
-    /**
+/**
  * @param {LinearLayer} a
  * @param {LinearLayer} b
  * @return {LinearLayer}
@@ -191,21 +246,7 @@ function fullConnection (a, b) {
 
 N.fullConnection = fullConnection;
 
-function createNeuron (constructor) {
-    return function () {
-        return new constructor();
-    }
-}
-//Activation Functions
-/**
- * @param {number} x
- * @returns {number}
- */
-function sigmoid (x) {
-    return 1 / (1 + Math.exp (-x));
-}
+//////////////////////////////////
+// NET CLASS
+//////////////////////////////////
 
-function relate (a, b, container) {
-    a.targets.push (container || b);
-    b.sources.push (container || a);
-}

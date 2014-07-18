@@ -11,7 +11,7 @@ var R = ramda,
  * @param {number} data
  * @returns {Neuron}
  */
-var setProp = R.curry (function (prop, obj, value){
+var setProp = R.curry (function (prop, value, obj){
     obj[prop] = value;
     return obj;
 });
@@ -145,13 +145,18 @@ Layer.prototype.layerActivationFunction = function () {
     });
 };
 
-Layer.prototype.setData = function setData (data) {
-    if (this.neurons.length != data.length)
-        throw new Error('Data length is not equal to the number of neurons');
+Object.defineProperty (Layer.prototype, 'data', {
+    get : function () {
+        return R.map (R.get('y'),this.neurons);
+    },
+    set: function (data) {
 
-    R.zipWith (setProp('y'), this.neurons, data)
-};
+        if (this.neurons.length != data.length)
+            throw new Error('Data length is not equal to the number of neurons');
 
+        R.zipWith(setProp('y'), data, this.neurons)
+    }
+});
 
 
     /**

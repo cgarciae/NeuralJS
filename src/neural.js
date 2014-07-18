@@ -250,3 +250,39 @@ N.fullConnection = fullConnection;
 // NET CLASS
 //////////////////////////////////
 
+/**
+ * @class
+ * @property {LinearLayer[]} inputLayers
+ * @property {LinearLayer[]} hiddenLayers
+ * @property {LinearLayer[]} outputLayers
+ * @property {LinearLayer[]} autoOutputLayers
+ * @property {LinearLayer} biasLayer
+ * @property {Neuron[]} neurons
+ * @property {Weight{}} weights
+ */
+function Net () {
+    this.inputLayers = [];
+    this.hiddenLayers = [];
+    this.outputLayers = [];
+    this.autoOutputLayers = [];
+    this.biasLayer = null;
+
+    this.neurons = [];
+    this.weights = [];
+}
+/**
+ * @param {LinearLayer} layer
+ * @returns {Net}
+ */
+Net.prototype.addInputLayer = function addInputLayer (layer) {
+    this.inputLayers.push (layer);
+    return this;
+};
+/**
+ * @param {LinearLayer} layer
+ * @returns {Net}
+ */
+Net.prototype.addOutputLayer = function addOutputLayer (layer) {
+    this.outputLayers.push (layer);
+    return this;
+};

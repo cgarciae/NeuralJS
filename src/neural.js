@@ -21,11 +21,13 @@ function addSignals (acc, weight){
 }
 var sumSignals = R.foldl (addSignals, 0);
 
+
 /**
  * @class
  * @property {number} val
  */
 function Val (val) {
+    if ( !this instanceof Val) return new Val(val);
     this.val = val;
 }
 N.Val = Val;
@@ -111,26 +113,26 @@ N.connectNeurons = connectNeurons;
 //Layers
 /**@class
  * @property {Neuron[]} neurons
- * @property {Layer[]} sources
- * @property {Layer[]} targets
+ * @property {LinearLayer[]} sources
+ * @property {LinearLayer[]} targets
  * @param {number} n
  */
-function Layer (n) {
+function LinearLayer (n) {
     this.neurons = R.map (createNeuron(Neuron), R.range(0,n));
     this.sources = [];
     this.targets = [];
 }
-N.Layer = Layer;
+N.LinearLayer = LinearLayer;
 
 /**
- * @param {Layer} b
- * @returns {Layer}
+ * @param {LinearLayer} b
+ * @returns {LinearLayer}
  */
-Layer.prototype.fullConnectTo = function fullConnectTo (b) {
+LinearLayer.prototype.fullConnectTo = function fullConnectTo (b) {
     return fullConnection (this, b);
 };
 
-Layer.prototype.activate = function activate () {
+LinearLayer.prototype.activate = function activate () {
     if (! this.neurons[0].y) {
         this.sources.forEach (function (l) {
             l.activate();
@@ -139,13 +141,13 @@ Layer.prototype.activate = function activate () {
     }
 };
 
-Layer.prototype.layerActivationFunction = function () {
+LinearLayer.prototype.layerActivationFunction = function () {
     this.neurons.forEach (function (n) {
         n.y = n.z;
     });
 };
 
-Object.defineProperty (Layer.prototype, 'data', {
+Object.defineProperty (LinearLayer.prototype, 'data', {
     get : function () {
         return R.map (R.get('y'),this.neurons);
     },
@@ -159,10 +161,21 @@ Object.defineProperty (Layer.prototype, 'data', {
 });
 
 
+Object.defineProperty (LinearLayer.prototype, 'targetData', {
+    set: function (data) {
+
+        if (this.neurons.length != data.length)
+            throw new Error('Data length is not equal to the number of neurons');
+
+        R.zipWith(setProp('t'), R.map(Val, data ), this.neurons);
+    }
+});
+
+
     /**
- * @param {Layer} a
- * @param {Layer} b
- * @return {Layer}
+ * @param {LinearLayer} a
+ * @param {LinearLayer} b
+ * @return {LinearLayer}
  */
 function fullConnection (a, b) {
     relate (a, b);
@@ -196,5 +209,3 @@ function relate (a, b, container) {
     a.targets.push (container || b);
     b.sources.push (container || a);
 }
-
-
